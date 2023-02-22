@@ -82,6 +82,7 @@ if __name__ == '__main__':
               "Cancelled Booking - call/Text to rebook 6177946237 (cell) 6177946237 (home)",
               "Cancelled Booking Day 3 - call/Text 6177946237 (cell) 6177946237 (home)",
               "Cancelled Booking - call/Text to rebook 4086231304 (cell) 4086231304 (home)",
-              "1st Class for $10 NOT BOOKED - Day 3 - call/Text to Book (313) 828-3020 (cell)"
+              "1st Class for $10 NOT BOOKED - Day 3 - call/Text to Book (313) 828-3020 (cell)",
+              "10 pack - 3 session left - Check In",
               ]:
         print(f"Text: {v} detail :{Utils.get_prospect_details(v)}:")

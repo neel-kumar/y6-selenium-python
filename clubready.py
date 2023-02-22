@@ -44,6 +44,7 @@ class ClubReady():
         'No Show Day 3': 'Cancel 2',
         'No Show Day 7': 'Cancel 3',
         'No Show Day 14': 'Cancel 7',
+        'No Show Day 30' : 'Cancel 7',
         #'No Show Day 30': ''
         'No Show - Same Day': 'Cancel 1',
         'Same Day': 'Day 1',
@@ -60,6 +61,13 @@ class ClubReady():
         'Main Page Inquiry Day 1': 'Day 1',
         'Main Page Inquiry Day 3': 'Day 3',
         'Main Page Inquiry Day 7': 'Day 7',
+        'Main Page Inquiry Day 14': 'Day 14',
+        'Main Page Inquiry Day 7': 'Day 7',
+        'Intro Offer - First Week for $26': 'Introduction to Yoga - Harvard',
+        '$26 Intro Week Missed Sale - Day 1': 'Why YogaSix?',
+        '$26 Intro Week - Day 4 of 7 - Intro Offer Check In': 'Introduction to Yoga - Harvard',
+        '10 pack - 1 session left': '10 classpack 1',
+        '10 pack - 3 session left - Check In': '10 classpack 3',
     }
 
     def __init__(self, driver: webdriver.Chrome, password: str):
@@ -130,10 +138,13 @@ class ClubReady():
                 name = tds[2].text
                 prospect_text = tds[4].text
                 details = utils.Utils.get_prospect_details(prospect_text)
-                if details and details[1] not in self.worked_on:
-                    self.worked_on.add(details[1])
-                    logging.info(f"Found prospect to work on name: {name} text: {prospect_text} details: {details}")
-                    return (name, workit, details)
+                if details:
+                    if details[1] not in self.worked_on:
+                        self.worked_on.add(details[1])
+                        logging.info(f"Found prospect to work on name: {name} text: {prospect_text} details: {details}")
+                        return (name, workit, details)
+                else:
+                    logging.error(f"Could not extract prospect type and/or cell phone from text: {prospect_text}")
 
         return None
 
