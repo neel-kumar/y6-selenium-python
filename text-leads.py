@@ -1,23 +1,22 @@
 import sys
 import logging
 import getpass
-import pandas as pd
 
 import utils
 import seutils
 import zipwhip
 
 
+# Global variables
 sms_batch_size = 50
 template = "Holiday Schedule"
 
-# Send emails to cell phone numbers in the "Cell Phone" column of the input XLSX file
 utils.config_logging()
+
+# Send text to cell phone numbers in the "Cell Phone" column of the input XLSX file
 xlsx = sys.argv[1] if len(sys.argv) > 1 else "MembersExport.xlsx" 
-logging.info(f"Sending emails to leads in file {xlsx}")
-df = pd.read_excel(xlsx)
-labels = df.iloc[3:4].values.flatten().tolist()
-cdf = df.iloc[4:].set_axis(labels, axis=1).reset_index()
+logging.info(f"Sending text to leads in file {xlsx}")
+cdf = utils.read_members_xlsx(xlsx)
 # Remove rows with cell number 10000000000
 cdf = cdf.loc[cdf['Cell Phone'] != '10000000000']
 cdf = cdf["Cell Phone"]

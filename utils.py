@@ -2,6 +2,7 @@ import re
 import time
 import random
 import logging
+import pandas as pd
 
 
 def rsleep_within(low, high):
@@ -21,6 +22,11 @@ def rsleep_long():
 def config_logging():
     logging.basicConfig(format='%(levelname)s: %(asctime)s - %(message)s', level=logging.INFO)
 
+
+def read_members_xlsx(xlsx):
+    df = pd.read_excel(xlsx)
+    labels = df.iloc[3:4].values.flatten().tolist()
+    return df.iloc[4:].set_axis(labels, axis=1).reset_index()
 
 class Utils:
 
