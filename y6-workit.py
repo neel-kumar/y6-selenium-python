@@ -79,8 +79,7 @@ def work_on_prospects():
         try:
             club_ready.work_on_prospects_tasks(zw)
             # Done working on prospects
-            run = False
-            y = input("Done working on prospects, do you want to rerun workit? ")
+            y = input("Done working on prospects, do you want to rerun workit (press y)? ")
             if y != "y":
                 run = False
             else:

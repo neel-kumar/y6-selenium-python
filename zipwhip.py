@@ -158,7 +158,7 @@ class Zipwhip():
             contact_found = True
             self.__select_non_group_contact()
         else:
-            logging.info(f"No contact found for cell number {cell}")
+            logging.debug(f"No contact found for cell number {cell}")
 
         sent = False
         if not self.__customer_stopped(cell) and (not stop_if_last_incoming or not self.__is_latest_incoming_text(cell)):
@@ -169,7 +169,7 @@ class Zipwhip():
             if tmp:
                 seutils.wait_and_scrollto(self.driver, kv[0], kv[1]).click()
                 template = f"//div[text()='{template_name}']"
-                logging.info(f"cell number {cell}, selecting template {template} for selector {template_name}")
+                logging.debug(f"cell number: {cell}, selecting template: {template} for selector: {template_name}")
                 # self.driver.find_element(By.CSS_SELECTOR, template).click()
                 seutils.wait_and_scrollto(self.driver, By.XPATH, template).click()
 

@@ -115,7 +115,7 @@ class ClubReady():
     def work_on_prospect(self, name, workit, details, zw):
         if details and details[0] in ClubReady.prospect_type_2_sms_template:
             sms_template = ClubReady.prospect_type_2_sms_template[details[0]]
-            logging.info(f"Working on name: {name} details: {details} sms template {sms_template}")
+            logging.info(f"Working on name: {name} details: {details} sms template: {sms_template}")
             if zw.send_template_sms(details[1], sms_template):
                 # Add to worked set. If Selenium fails while logging the phone call, user must do it manually.
                 self.worked_on.add(details[1])
@@ -137,6 +137,7 @@ class ClubReady():
                 self.switchto()
         elif details and details[0] not in ClubReady.prospect_type_2_sms_template:
             logging.error(f"No template provided for {details[0]}")
+            self.worked_on.add(details[1])
             
         utils.rsleep_long()
 
@@ -157,8 +158,7 @@ class ClubReady():
                 details = utils.Utils.get_prospect_details(prospect_text)
                 if details:
                     if details[1] not in self.worked_on:
-                        # self.worked_on.add(details[1])
-                        logging.info(f"Found prospect to work on name: {name} text: {prospect_text} details: {details}")
+                        logging.debug(f"Found prospect to work on name: {name} text: {prospect_text} details: {details}")
                         return (name, workit, details)
                 else:
                     logging.error(f"Could not extract prospect type and/or cell phone from text: {prospect_text}")

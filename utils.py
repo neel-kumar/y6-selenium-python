@@ -7,7 +7,7 @@ import pandas as pd
 
 def rsleep_within(low, high):
     millis = random.randint(low, high)
-    logging.info(f"Sleeping for {millis} milliseconds.")
+    logging.debug(f"Sleeping for {millis} milliseconds.")
     time.sleep(millis/1000)
 
 
