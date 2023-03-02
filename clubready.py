@@ -52,6 +52,7 @@ class ClubReady():
         'Renewed Interest - Day 3': 'Day 3',
         'Renewed Interest - Day 7': 'Day 7',
         'Renewed Interest - Day 14': 'Day 14',
+        'Renewed Interest - Day 30': 'Day 30',
         'Cancelled Booking': 'Cancel 1',
         'Cancelled Booking Day 1': 'Cancel 1',
         'Cancelled Booking Day 3': 'Cancel 3',
@@ -65,24 +66,30 @@ class ClubReady():
         'Main Page Inquiry Day 7': 'Day 7',
         'Intro Offer - First Week for $26': 'Introduction to Yoga - Harvard',
         '$26 Intro Week Missed Sale - Day 1': 'Why YogaSix?',
+        '$26 Intro Week Missed Sale - Day 7': 'Missed Sale Day 1',
+        '$26 Intro Week Missed Sale - Day 14': 'Missed Sale Day 3',
+        '$26 Intro Week Missed Sale - Day 30': 'Missed Sale Day 3',
         '$26 Intro Week - Day 4 of 7 - Intro Offer Check In': 'Introduction to Yoga - Harvard',
         '10 pack - 1 session left': '10 classpack 1',
         '10 pack - 3 session left - Check In': '10 classpack 3',
     }
 
+
     def __init__(self, driver: webdriver.Chrome, password: str):
         self.driver = driver
         self.password = password
         self.window_handle = None
-        # Ignore 10000000000 cell number
-        # Ignore 4088335821 - customer sent STOP sms
-        # 8054588722 sent STOP
-        self.worked_on = {'10000000000'}
+        self.reset_worked_on()
 
 
     def switchto(self):
         self.driver.switch_to.window(self.window_handle)
         return self
+
+
+    def reset_worked_on(self):
+        # Ignore 10000000000 cell number
+        self.worked_on = {'10000000000'}
 
 
     def login(self):
@@ -110,6 +117,8 @@ class ClubReady():
             sms_template = ClubReady.prospect_type_2_sms_template[details[0]]
             logging.info(f"Working on name: {name} details: {details} sms template {sms_template}")
             if zw.send_template_sms(details[1], sms_template):
+                # Add to worked set. If Selenium fails while logging the phone call, user must do it manually.
+                self.worked_on.add(details[1])
                 self.switchto()
                 workit.click()
                 select = Select(seutils.wait_and_scrollto(self.driver, By.ID, "thecalloutcome"))
@@ -122,29 +131,39 @@ class ClubReady():
                 time.sleep(6)
                 seutils.wait_and_scrollto(self.driver, By.CSS_SELECTOR, ".fancybox-close").click()
             else:
+                # Mark this prospect as done, since the text will not be sent if user has stopped or recent text is incoming.
+                # If you don't add to worked set, then it will in infinite loop!
+                self.worked_on.add(details[1])
                 self.switchto()
         elif details and details[0] not in ClubReady.prospect_type_2_sms_template:
             logging.error(f"No template provided for {details[0]}")
             
-            utils.rsleep_long()
+        utils.rsleep_long()
 
 
     def find_first_to_work_on(self, todorows):
         for row in todorows:
-                #scrollto(self.driver, row)
-                #logging.info(self.get_todo_details(row))
-                tds = row.find_elements(By.TAG_NAME, "td")
-                workit = tds[1].find_element(By.TAG_NAME, "span")
-                name = tds[2].text
-                prospect_text = tds[4].text
+            # seutils.scrollto(self.driver, row) # Quite often fails as: selenium.common.exceptions.ElementNotInteractableException: Message: element not interactable: [object HTMLDivElement] has no size and location
+            tds = row.find_elements(By.TAG_NAME, "td")
+            workit = tds[1].find_element(By.TAG_NAME, "span")
+            name = tds[2].text
+
+            prospect_text = tds[4].text
+            if len(prospect_text) == 0:
+                # Try to grab from span element
+                prospect_text = tds[4].find_element(By.TAG_NAME, "span").text
+
+            if len(prospect_text) > 0:
                 details = utils.Utils.get_prospect_details(prospect_text)
                 if details:
                     if details[1] not in self.worked_on:
-                        self.worked_on.add(details[1])
+                        # self.worked_on.add(details[1])
                         logging.info(f"Found prospect to work on name: {name} text: {prospect_text} details: {details}")
                         return (name, workit, details)
                 else:
                     logging.error(f"Could not extract prospect type and/or cell phone from text: {prospect_text}")
+            else:
+                logging.error(f"Empty prospect_text for row {tds[4].get_property('outerHTML')}")
 
         return None
 
@@ -164,7 +183,6 @@ class ClubReady():
             work_on = self.find_first_to_work_on(todorows)
             while work_on:
                 self.work_on_prospect(work_on[0], work_on[1], work_on[2], zw)
-                utils.rsleep_long()
                 todorows = self.driver.find_elements(By.CLASS_NAME, "toddowrow")
                 work_on = self.find_first_to_work_on(todorows)
 
