@@ -183,18 +183,6 @@ class Zipwhip():
                         logging.info(f"Did not click on send button for cell number {cell}")
                 else:
                     logging.error(f"cell number {cell}, selected template {template}, but send button is not enabled/found. Contact found: {'YES' if contact_found else 'NO'}")
-
-                # Click to send
-                #if click_send:
-                #    send_button = seutils.wait_and_scrollto_catch(self.driver, By.CSS_SELECTOR, ".zk-button-primary")
-                #    if send_button:
-                #        send_button.click()
-                #        sent = True
-                #    else:
-                #        logging.error(f"cell number {cell}, selected template {template}, but send button is not enabled/found. Contact found: {'YES' if contact_found else 'NO'}")
-                #else:
-                #    logging.info(f"Did not click on send button for cell number {cell}")
-
             else:
                 logging.error(f"Template selector element not found for cell number {cell}, check if the recent incoming sms is STOP")
 
