@@ -80,6 +80,11 @@ def work_on_prospects():
             club_ready.work_on_prospects_tasks(zw)
             # Done working on prospects
             run = False
+            y = input("Done working on prospects, do you want to rerun workit? ")
+            if y != "y":
+                run = False
+            else:
+                club_ready.reset_worked_on()
         except Exception:
             exception_handler()
             y = input("Check the screenshot, work on the browser and press y if you want me to continue on working on prospects: ")
