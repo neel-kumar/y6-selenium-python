@@ -1,5 +1,4 @@
-import time
-import random
+import sys
 import logging
 import getpass
 import traceback
@@ -32,7 +31,7 @@ def exception_handler():
     screenshot.show()
 
 
-def setup():
+def setup(studio_selector):
     global driver
     global zw
     global club_ready
@@ -42,7 +41,7 @@ def setup():
 
     driver = seutils.open_browser()
 
-    club_ready = clubready.ClubReady(driver, club_ready_password).login()
+    club_ready = clubready.ClubReady(driver, club_ready_password).login(studio_selector)
     zw = zipwhip.Zipwhip(driver, zw_password).login()
     
 
@@ -99,8 +98,10 @@ club_ready = None
 
 # main program
 try:
+    # 1 is Campbell and 2 is Saratoga
+    studio_selector = int(sys.argv[1]) if len(sys.argv) > 1 else 1 
     utils.config_logging()
-    setup()
+    setup(studio_selector)
     work_on_prospects()
 except Exception:
     exception_handler()

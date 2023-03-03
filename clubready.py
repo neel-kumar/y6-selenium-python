@@ -91,8 +91,8 @@ class ClubReady():
         # Ignore 10000000000 cell number
         self.worked_on = {'10000000000'}
 
-
-    def login(self):
+    # 1 is Campbell and 2 is Saratoga
+    def login(self, select):
         self.driver.get("https://www.clubready.com/cl/yogasix.asp")
         # Enter login/password
         self.driver.find_element(By.ID, "uid").send_keys("ajnavi.kumar@yogasix.com")
@@ -101,8 +101,7 @@ class ClubReady():
         utils.rsleep()
         self.driver.find_element(By.NAME, "submit").click()
 
-        # Select Campbell now
-        self.driver.find_element(By.CSS_SELECTOR, "option:nth-child(1)").click()
+        self.driver.find_element(By.CSS_SELECTOR, f"option:nth-child({select})").click()
     
         utils.rsleep()
         self.driver.find_element(By.NAME, "Submit2").click()
@@ -163,7 +162,7 @@ class ClubReady():
                 else:
                     logging.error(f"Could not extract prospect type and/or cell phone from text: {prospect_text}")
             else:
-                logging.error(f"Empty prospect_text for row {tds[4].get_property('outerHTML')}")
+                logging.debug(f"Empty prospect_text for row {tds[4].get_property('outerHTML')}")
 
         return None
 
