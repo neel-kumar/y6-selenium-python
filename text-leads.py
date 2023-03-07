@@ -26,7 +26,7 @@ driver = None
 try:
     zw_password = getpass.getpass("Enter Zipwhip password: ")
     driver = seutils.open_browser()
-    zw = zipwhip.Zipwhip(driver, zw_password).login()
+    zw = zipwhip.Zipwhip(driver, zw_password).login(1)
 
     i = 0
     while i <= len(cdf):

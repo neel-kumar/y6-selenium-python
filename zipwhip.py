@@ -36,7 +36,7 @@ class Zipwhip():
         self.driver.switch_to.window(self.window_handle)
         return self
 
-    def login(self):
+    def login(self, select):
         self.driver.switch_to.new_window()
         self.driver.get(Zipwhip.URL)
         self.driver.find_element(By.NAME, "identity").send_keys("ajnavi.kumar@yogasix.com")
@@ -51,6 +51,11 @@ class Zipwhip():
         self.driver.find_element(By.CSS_SELECTOR, ".zk-login-button").click()
 
         seutils.wait_and_scrollto(self.driver, By.CSS_SELECTOR, ".zk-action-icon-iconElement > path")
+
+        # Click on name
+        self.driver.find_element(By.CLASS_NAME, 'line-drop-down-menu_fullNameText').click()
+        # first - Campbell, second - Saratoga
+        self.driver.find_elements(By.CLASS_NAME, 'zk-selectable-list_listItemWrapper')[select - 1].click()
 
         utils.rsleep()
         self.window_handle = self.  driver.current_window_handle
@@ -196,7 +201,7 @@ if __name__ == '__main__':
     try:
         zw_password = getpass.getpass("Enter Zipwhip password: ")
         driver = seutils.open_browser()
-        zw = Zipwhip(driver, zw_password).login()
+        zw = Zipwhip(driver, zw_password).login(1)
         # zw.send_template_sms("4085945095,+1 (408) 594-5095,+14085945095", "Cancel 1", click_send=False)
         zw.send_template_sms("4085945095", "Cancel 1", click_send=True)
         zw.send_template_sms("4085945095", "Cancel 1", stop_if_last_incoming=False)

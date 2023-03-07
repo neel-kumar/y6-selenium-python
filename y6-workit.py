@@ -42,7 +42,7 @@ def setup(studio_selector):
     driver = seutils.open_browser()
 
     club_ready = clubready.ClubReady(driver, club_ready_password).login(studio_selector)
-    zw = zipwhip.Zipwhip(driver, zw_password).login()
+    zw = zipwhip.Zipwhip(driver, zw_password).login(studio_selector)
     
 
 def test():

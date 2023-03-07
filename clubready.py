@@ -72,6 +72,15 @@ class ClubReady():
         '$26 Intro Week - Day 4 of 7 - Intro Offer Check In': 'Introduction to Yoga - Harvard',
         '10 pack - 1 session left': '10 classpack 1',
         '10 pack - 3 session left - Check In': '10 classpack 3',
+
+        # Presale Studio
+        'Presale Lead - Day 3' :'Day 3',
+        'Presale Lead - Day 7' :'Day 7',
+        'Presale Lead - Day 1' :'Day 1',
+        'Presale Lead - Day 14' :'Day 14',
+        'Presale Lead - Day 30' :'Day 30',
+        'Presale Lead - Day 60' :'Day 60',
+
     }
 
 
