@@ -55,7 +55,12 @@ class Zipwhip():
         # Click on name
         self.driver.find_element(By.CLASS_NAME, 'line-drop-down-menu_fullNameText').click()
         # first - Campbell, second - Saratoga
-        self.driver.find_elements(By.CLASS_NAME, 'zk-selectable-list_listItemWrapper')[select - 1].click()
+        utils.rsleep_long()
+        selectors = self.driver.find_elements(By.CLASS_NAME, 'zk-selectable-list_listItemWrapper')
+        print(f"Length of selectors {len(selectors)}, select={select}")
+        selectors[select - 1].click()
+
+        # input("Waiting: ")
 
         utils.rsleep()
         self.window_handle = self.  driver.current_window_handle
