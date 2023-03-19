@@ -29,20 +29,21 @@ def exception_handler():
     driver.save_screenshot("error.png")
     screenshot = Image.open("error.png")
     screenshot.show()
+    utils.beep()
 
 
-def setup(studio_selector):
+def setup(login: str):
     global driver
     global zw
     global club_ready
 
-    club_ready_password = getpass.getpass("Enter ClubReady password: ")
-    zw_password = getpass.getpass("Enter Zipwhip password: ")
+    club_ready_password = getpass.getpass("Enter ClubReady/Zipwhip password: ")
+    zw_password = club_ready_password # getpass.getpass("Enter Zipwhip password: ")
 
     driver = seutils.open_browser()
 
-    club_ready = clubready.ClubReady(driver, club_ready_password).login(studio_selector)
-    zw = zipwhip.Zipwhip(driver, zw_password).login(studio_selector)
+    club_ready = clubready.ClubReady(driver, login, club_ready_password).login()
+    zw = zipwhip.Zipwhip(driver, login, zw_password).login()
     
 
 def test():
@@ -78,6 +79,7 @@ def work_on_prospects():
         try:
             club_ready.work_on_prospects_tasks(zw)
             # Done working on prospects
+            utils.beep()
             y = input("Done working on prospects, do you want to rerun workit (press y)? ")
             if y != "y":
                 run = False
@@ -98,10 +100,10 @@ club_ready = None
 
 # main program
 try:
-    # 1 is Campbell and 2 is Saratoga
-    studio_selector = int(sys.argv[1]) if len(sys.argv) > 1 else 1 
+    # Defaulting to Campbell
+    login = sys.argv[1] if len(sys.argv) > 1 else "campbell@yogasix.com"
     utils.config_logging()
-    setup(studio_selector)
+    setup(login)
     work_on_prospects()
 except Exception:
     exception_handler()

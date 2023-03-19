@@ -26,8 +26,9 @@ class Zipwhip():
     # https://www.seleniumeasy.com/selenium-tutorials/examples-for-xpath-and-css-selectors
     # css=div:contains('Cancel 3')
 
-    def __init__(self, driver: webdriver.Chrome, password: str):
+    def __init__(self, driver: webdriver.Chrome, username: str, password: str):
         self.driver = driver
+        self.username = username
         self.password = password
         self.window_handle = None
 
@@ -36,10 +37,10 @@ class Zipwhip():
         self.driver.switch_to.window(self.window_handle)
         return self
 
-    def login(self, select):
+    def login(self):
         self.driver.switch_to.new_window()
         self.driver.get(Zipwhip.URL)
-        self.driver.find_element(By.NAME, "identity").send_keys("ajnavi.kumar@yogasix.com")
+        self.driver.find_element(By.NAME, "identity").send_keys(self.username)
     
         utils.rsleep()
         seutils.wait_and_scrollto(self.driver, By.CSS_SELECTOR, ".zk-login-button").click()
@@ -51,16 +52,6 @@ class Zipwhip():
         self.driver.find_element(By.CSS_SELECTOR, ".zk-login-button").click()
 
         seutils.wait_and_scrollto(self.driver, By.CSS_SELECTOR, ".zk-action-icon-iconElement > path")
-
-        # Click on name
-        self.driver.find_element(By.CLASS_NAME, 'line-drop-down-menu_fullNameText').click()
-        # first - Campbell, second - Saratoga
-        utils.rsleep_long()
-        selectors = self.driver.find_elements(By.CLASS_NAME, 'zk-selectable-list_listItemWrapper')
-        print(f"Length of selectors {len(selectors)}, select={select}")
-        selectors[select - 1].click()
-
-        # input("Waiting: ")
 
         utils.rsleep()
         self.window_handle = self.  driver.current_window_handle

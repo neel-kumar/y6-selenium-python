@@ -24,9 +24,10 @@ cdf = cdf["Cell Phone"]
 
 driver = None
 try:
+    zw_login = input("Enter Zipwhip login: ")
     zw_password = getpass.getpass("Enter Zipwhip password: ")
     driver = seutils.open_browser()
-    zw = zipwhip.Zipwhip(driver, zw_password).login(1)
+    zw = zipwhip.Zipwhip(driver, zw_login, zw_password).login()
 
     i = 0
     while i <= len(cdf):

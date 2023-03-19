@@ -2,7 +2,14 @@ import re
 import time
 import random
 import logging
+import winsound
 import pandas as pd
+
+
+def beep(frequency=500, duration=200):
+    # frequency = 500  # Set Frequency To 500 Hertz
+    # duration = 200  # Set Duration To 200 ms
+    winsound.Beep(frequency, duration)
 
 
 def rsleep_within(low, high):
@@ -27,6 +34,7 @@ def read_members_xlsx(xlsx):
     df = pd.read_excel(xlsx)
     labels = df.iloc[3:4].values.flatten().tolist()
     return df.iloc[4:].set_axis(labels, axis=1).reset_index()
+
 
 class Utils:
 
@@ -90,5 +98,7 @@ if __name__ == '__main__':
               "Cancelled Booking - call/Text to rebook 4086231304 (cell) 4086231304 (home)",
               "1st Class for $10 NOT BOOKED - Day 3 - call/Text to Book (313) 828-3020 (cell)",
               "10 pack - 3 session left - Check In",
+              "Mobile Free Class - Unscheduled - Day 3 call 4056483715 (cell)",
+              "call (224) 567-0716 (cell)",
               ]:
         print(f"Text: {v} detail :{Utils.get_prospect_details(v)}:")

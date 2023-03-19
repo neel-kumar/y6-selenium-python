@@ -80,12 +80,15 @@ class ClubReady():
         'Presale Lead - Day 14' :'Day 14',
         'Presale Lead - Day 30' :'Day 30',
         'Presale Lead - Day 60' :'Day 60',
+        'Presale Lead Same Day' :'Day 1',
+        'Presale Contacted - Needs Follow Up Task' :'',
 
     }
 
 
-    def __init__(self, driver: webdriver.Chrome, password: str):
+    def __init__(self, driver: webdriver.Chrome, username: str, password: str):
         self.driver = driver
+        self.username = username
         self.password = password
         self.window_handle = None
         self.reset_worked_on()
@@ -100,20 +103,17 @@ class ClubReady():
         # Ignore 10000000000 cell number
         self.worked_on = {'10000000000'}
 
-    # 1 is Campbell and 2 is Saratoga
-    def login(self, select):
+    def login(self):
         self.driver.get("https://www.clubready.com/cl/yogasix.asp")
         # Enter login/password
-        self.driver.find_element(By.ID, "uid").send_keys("ajnavi.kumar@yogasix.com")
+        self.driver.find_element(By.ID, "uid").send_keys(self.username)
         self.driver.find_element(By.ID, "pw").send_keys(self.password)
     
         utils.rsleep()
         self.driver.find_element(By.NAME, "submit").click()
-
-        self.driver.find_element(By.CSS_SELECTOR, f"option:nth-child({select})").click()
     
-        utils.rsleep()
-        self.driver.find_element(By.NAME, "Submit2").click()
+        # utils.rsleep()
+        # self.driver.find_element(By.NAME, "Submit2").click()
 
         utils.rsleep()
         self.window_handle = self.driver.current_window_handle
