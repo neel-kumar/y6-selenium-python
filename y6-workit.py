@@ -28,8 +28,8 @@ def exception_handler():
     traceback.print_exc()
     driver.save_screenshot("error.png")
     screenshot = Image.open("error.png")
-    screenshot.show()
     utils.beep()
+    screenshot.show()
 
 
 def setup(login: str):
@@ -80,14 +80,14 @@ def work_on_prospects():
             club_ready.work_on_prospects_tasks(zw)
             # Done working on prospects
             utils.beep()
-            y = input("Done working on prospects, do you want to rerun workit (press y)? ")
+            y = input("Done working on prospects, press y to rerun workit: ")
             if y != "y":
                 run = False
             else:
                 club_ready.reset_worked_on()
         except Exception:
             exception_handler()
-            y = input("Check the screenshot, work on the browser and press y if you want me to continue on working on prospects: ")
+            y = input("Check the screenshot, work on the browser and press y to continue working on prospects: ")
             if y != "y":
                 run = False
 

@@ -81,14 +81,19 @@ def read_email_from_file(filename):
     return txt
 
 
-def email_members():
-    email_batch_size = 20
+def setup():
     utils.config_logging()
     service = authenticate()
 
-    subject = 'Y6 Campbell: Special Offer On Class Packs!'
+    subject = 'Y6 Saratoga: Special Offer On Class Packs!'
     body = read_email_from_file('gmail-template.txt')
     logging.info(f"Sending email using subject: {subject} body {body}")
+    return (service, subject, body)
+
+
+def email_members():
+    (service, subject, body) = setup()
+    email_batch_size = 20
 
     df = utils.read_members_xlsx(xlsx)
     df = df["Email"]
@@ -103,6 +108,14 @@ def email_members():
 
     # status = send_email(service, "kumar.soumitra@gmail.com,ajnavi.kumar@yogasix.com", subject, body)
     # logging.info(f"Email status: {status}")
+
+
+def test_email():
+    (service, subject, body) = setup()
+    email_ids = "ajnavi.kumar@yogasix.com"
+    logging.info(f"Sending email to list [{email_ids}]")
+    status = send_email(service, email_ids, subject, body)
+    logging.info(f"Email status: {status}")
 
 
 if __name__ == '__main__':

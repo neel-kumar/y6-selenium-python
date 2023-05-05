@@ -33,6 +33,7 @@ def config_logging():
 def read_members_xlsx(xlsx):
     df = pd.read_excel(xlsx)
     labels = df.iloc[3:4].values.flatten().tolist()
+    # print(f"labels in xlsx file are: {labels}")
     return df.iloc[4:].set_axis(labels, axis=1).reset_index()
 
 
